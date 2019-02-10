@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using timepunch.Services.Authentication.Exceptions;
+using timepunch.Exceptions;
 
 namespace timepunch.Models
 {

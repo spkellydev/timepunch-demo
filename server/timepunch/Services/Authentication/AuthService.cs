@@ -2,8 +2,8 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using timepunch.Models;
-using timepunch.Services.Authentication.Exceptions;
 using timepunch.Validation;
+using timepunch.Exceptions;
 using JWT.Builder;
 using JWT.Algorithms;
 

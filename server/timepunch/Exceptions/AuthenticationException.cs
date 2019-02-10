@@ -3,9 +3,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using timepunch.Exceptions;
 
-namespace timepunch.Services.Authentication.Exceptions
+namespace timepunch.Exceptions
 {
     [System.Serializable]
     public class AuthenticationException : TimepunchException
