@@ -1,0 +1,9 @@
+# editor
+.vscode
+
+#client
+client/node_modules
+
+# server cs files
+server/timepunch/bin
+server/timepunch/obj
