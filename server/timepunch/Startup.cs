@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using timepunch.Models;
 using timepunch.Services.Authentication;
 
 namespace timepunch
@@ -27,6 +29,7 @@ namespace timepunch
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddEntityFrameworkNpgsql().AddDbContext<TimepunchContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("TimepunchConnection")));
             services.AddSingleton<IAuthService, AuthService>();
         }
 

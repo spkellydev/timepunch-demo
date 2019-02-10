@@ -1,4 +1,5 @@
 using timepunch.Models;
+using timepunch.Services.Authentication.Exceptions;
 
 namespace timepunch.Services.Authentication
 {
@@ -6,13 +7,12 @@ namespace timepunch.Services.Authentication
     {
         public IUserModelRO CreateUser(IUserModel user)
         {
-            if (user.password.Length < 5)
-            {
-                throw new System.Exception("password is less than 6 characters");
-            }
+            // throw password length exception
+            if (user.password.Length <= 5) throw new AuthenticationException(AuthException.PASSWORD_LENGTH);
+
             var userResponseObj = new IUserModelRO {
                 username = user.username,
-                error = "ok"
+                error = AuthException.NONE
             };
             return userResponseObj;
         }
