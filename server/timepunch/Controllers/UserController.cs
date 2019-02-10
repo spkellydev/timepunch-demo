@@ -12,7 +12,7 @@ namespace timepunch.Controllers
         private readonly IAuthService _auth;
         public UserController(IAuthService auth)
         {
-            _auth = new AuthService();
+            _auth = auth;
         }
 
         [HttpPost]

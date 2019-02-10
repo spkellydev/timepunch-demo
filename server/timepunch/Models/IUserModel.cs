@@ -1,11 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using timepunch.Services.Authentication.Exceptions;
 
 namespace timepunch.Models
 {
     public class IUserModel
     {
-        public Guid Id { get; set; }
+        [Key]
         public string username { get; set; }
         public string password { get; set; }
     }

@@ -30,7 +30,7 @@ namespace timepunch
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddEntityFrameworkNpgsql().AddDbContext<TimepunchContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("TimepunchConnection")));
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
