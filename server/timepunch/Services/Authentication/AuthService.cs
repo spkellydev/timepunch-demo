@@ -1,8 +1,11 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using timepunch.Models;
 using timepunch.Services.Authentication.Exceptions;
 using timepunch.Validation;
+using JWT.Builder;
+using JWT.Algorithms;
 
 namespace timepunch.Services.Authentication
 {
@@ -27,9 +30,25 @@ namespace timepunch.Services.Authentication
             var saved = _ctx.SaveChanges();
             // saved should contain the number of rows affected
             if (saved < 1) ThrowWithCode(AuthException.USER_COULD_NOT_BE_CREATED);
-
+            // return with token
             return new IUserModelRO {
                 username = (string)createdUser.Property("username").CurrentValue,
+                token = AssignTokenToUser(createdUser.Entity),
+                error = AuthException.OK
+            };
+        }
+
+        async public Task<IUserModelRO> LoginUser(IUserModel user)
+        {
+            // see if user is in the db
+            var foundUser = await _ctx.Users.FindAsync(user.username);
+            if (foundUser == null) ThrowWithCode(AuthException.NO_EXISTING_USER);
+            // check the password
+            if (!ComparePassword(user.password, foundUser.password)) ThrowWithCode(AuthException.PW_DOESNT_MATCH);
+            // return with token
+            return new IUserModelRO {
+                username = (string)foundUser.username,
+                token = AssignTokenToUser(foundUser),
                 error = AuthException.OK
             };
         }
@@ -40,7 +59,7 @@ namespace timepunch.Services.Authentication
         /// - Between 3 and 16 characters
         /// - No symbols
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="username">unregistered username to validate</param>
         private void ValidateUsername(string username)
         {
             var len = username.Length;
@@ -54,7 +73,7 @@ namespace timepunch.Services.Authentication
         /// - At least 2 numbers
         /// - At least 1 special character
         /// </summary>
-        /// <param name="password"></param>
+        /// <param name="password">unhashed password to validate</param>
         private void ValidatePassword(string password)
         {
             var len = password.Length;
@@ -78,6 +97,25 @@ namespace timepunch.Services.Authentication
         /// <param name="supplied">supplied password</param>
         /// <returns></returns>
         private string HashPassword(string supplied) => BCrypt.Net.BCrypt.HashPassword(supplied);
+
+        private bool ComparePassword(string supplied, string hashed) => BCrypt.Net.BCrypt.Verify(supplied, hashed);
+
+        /// <summary>
+        /// After a user is authenicated, a token needs to be assigned to the user so they can access protected content
+        /// </summary>
+        /// <param name="authenticatedUser">An authenticated user should be passed, otherwise it's just chaos</param>
+        /// <returns>string, token: { expiration, issuedAt, username }</returns>
+        private string AssignTokenToUser(IUserModel authenticatedUser) {
+            var now = DateTimeOffset.UtcNow;
+            var token = new JwtBuilder()
+                            .WithAlgorithm(new HMACSHA256Algorithm())
+                            .WithSecret("secret")
+                            .AddClaim("exp", now.AddHours(1).ToUnixTimeMilliseconds())
+                            .AddClaim("iat", now.ToUnixTimeMilliseconds())
+                            .AddClaim("username", authenticatedUser.username)
+                            .Build();
+            return token;
+        }
         #endregion
     }
 }

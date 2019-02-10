@@ -26,6 +26,8 @@ namespace timepunch.Services.Authentication.Exceptions
         OK,
         [Description("Could not create user with that username")]
         EXISTING_USER,
+        [Description("Could not find existing user")]
+        NO_EXISTING_USER,
         [Description("Username should be between 3 and 16 characters")]
         USERNAME_LENGTH,
         [Description("Username shouldn't contain symbols")]
@@ -40,6 +42,8 @@ namespace timepunch.Services.Authentication.Exceptions
         PW_SHOULD_HAVE_LOWERCASE,
         [Description("Password should have at least one special character")]
         PW_SHOULD_HAVE_SYMBOLS,
+        [Description("Could not login")]
+        PW_DOESNT_MATCH,
         [Description("Internal server error")]
         USER_COULD_NOT_BE_CREATED,
     }

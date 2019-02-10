@@ -14,6 +14,7 @@ namespace timepunch.Models
     public class IUserModelRO
     {
         public string username { get; set; }
+        public string token { get; set; }
         public object error { get; set; }
     }
 }
