@@ -5,7 +5,7 @@ namespace timepunch.Services.Authentication
 {
     public interface IAuthService
     {
-        IUserModelRO CreateUser(IUserModel user);
-        Task<IUserModelRO> LoginUser(IUserModel user);
+        UserModelRO CreateUser(UserModel user);
+        Task<UserModelRO> LoginUser(UserModel user);
     }
 }

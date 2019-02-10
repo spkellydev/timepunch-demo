@@ -13,7 +13,7 @@ namespace timepunch.Services.Authentication
     {
         private readonly TimepunchContext _ctx;
         public AuthService(TimepunchContext ctx) { _ctx = ctx; }
-        public IUserModelRO CreateUser(IUserModel user)
+        public UserModelRO CreateUser(UserModel user)
         {
             // check for existing user
             var existingUser = _ctx.Users.Find(user.username);
@@ -31,14 +31,14 @@ namespace timepunch.Services.Authentication
             // saved should contain the number of rows affected
             if (saved < 1) ThrowWithCode(AuthException.USER_COULD_NOT_BE_CREATED);
             // return with token
-            return new IUserModelRO {
+            return new UserModelRO {
                 username = (string)createdUser.Property("username").CurrentValue,
                 token = AssignTokenToUser(createdUser.Entity),
                 error = AuthException.OK
             };
         }
 
-        async public Task<IUserModelRO> LoginUser(IUserModel user)
+        async public Task<UserModelRO> LoginUser(UserModel user)
         {
             // see if user is in the db
             var foundUser = await _ctx.Users.FindAsync(user.username);
@@ -46,7 +46,7 @@ namespace timepunch.Services.Authentication
             // check the password
             if (!ComparePassword(user.password, foundUser.password)) ThrowWithCode(AuthException.PW_DOESNT_MATCH);
             // return with token
-            return new IUserModelRO {
+            return new UserModelRO {
                 username = (string)foundUser.username,
                 token = AssignTokenToUser(foundUser),
                 error = AuthException.OK
@@ -105,7 +105,7 @@ namespace timepunch.Services.Authentication
         /// </summary>
         /// <param name="authenticatedUser">An authenticated user should be passed, otherwise it's just chaos</param>
         /// <returns>string, token: { expiration, issuedAt, username }</returns>
-        private string AssignTokenToUser(IUserModel authenticatedUser) {
+        private string AssignTokenToUser(UserModel authenticatedUser) {
             var now = DateTimeOffset.UtcNow;
             var token = new JwtBuilder()
                             .WithAlgorithm(new HMACSHA256Algorithm())

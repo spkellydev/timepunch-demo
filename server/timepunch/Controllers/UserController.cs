@@ -18,23 +18,23 @@ namespace timepunch.Controllers
 
         [HttpPost]
         [Route("register")]
-        public ActionResult<IUserModelRO> Create(IUserModel user)
+        public ActionResult<UserModelRO> Create(UserModel user)
         {
-            IUserModelRO userRO;
+            UserModelRO userRO;
             try { userRO = _auth.CreateUser(user); } catch(System.Exception e) {
-                userRO = new IUserModelRO { error = e.Message };
+                userRO = new UserModelRO { error = e.Message };
             }
             return userRO;
         }
 
         [HttpPost]
         [Route("login")]
-        async public Task<ActionResult<IUserModelRO>> Login(IUserModel user)
+        async public Task<ActionResult<UserModelRO>> Login(UserModel user)
         {
-            IUserModelRO userRO;
+            UserModelRO userRO;
             var loginUser = Task.Run(() => _auth.LoginUser(user));
             try { userRO = await loginUser; } catch(System.Exception e) {
-                userRO = new IUserModelRO { error = e.Message };
+                userRO = new UserModelRO { error = e.Message };
             }
             return userRO;
         }
