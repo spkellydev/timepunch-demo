@@ -1,42 +1,20 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using timepunch.Models;
-using timepunch.Services.Authentication;
+using timepunch.Services.User;
 
 namespace timepunch.Controllers
 {
-    [Route("auth/")]
+    [Route("v1/api/user/")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IAuthService _auth;
-        public UserController(IAuthService auth)
+        private readonly IUserService _repo;
+        public UserController(IUserService repo) { _repo = repo; }
+        [HttpGet("profile")]
+        public UserProfileModel CreateProfile()
         {
-            _auth = auth;
-        }
-
-        [HttpPost]
-        [Route("register")]
-        public ActionResult<UserModelRO> Create(UserModel user)
-        {
-            UserModelRO userRO;
-            try { userRO = _auth.CreateUser(user); } catch(System.Exception e) {
-                userRO = new UserModelRO { error = e.Message };
-            }
-            return userRO;
-        }
-
-        [HttpPost]
-        [Route("login")]
-        async public Task<ActionResult<UserModelRO>> Login(UserModel user)
-        {
-            UserModelRO userRO;
-            var loginUser = Task.Run(() => _auth.LoginUser(user));
-            try { userRO = await loginUser; } catch(System.Exception e) {
-                userRO = new UserModelRO { error = e.Message };
-            }
-            return userRO;
+            /// temporary dummy route to better visualize
+            return _repo.CreateProfile();
         }
     }
 }
