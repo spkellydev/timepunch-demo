@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using timepunch.Models;
-using timepunch.Services.Authentication;
+using timepunch.Services;
 
 namespace timepunch.Controllers
 {

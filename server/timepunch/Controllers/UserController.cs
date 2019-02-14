@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using timepunch.Models;
-using timepunch.Services.User;
+using timepunch.Services;
 
 namespace timepunch.Controllers
 {

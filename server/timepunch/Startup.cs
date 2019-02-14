@@ -12,8 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using timepunch.Models;
-using timepunch.Services.Authentication;
-using timepunch.Services.User;
+using timepunch.Services;
 
 namespace timepunch
 {
@@ -33,6 +32,7 @@ namespace timepunch
             services.AddEntityFrameworkNpgsql().AddDbContext<TimepunchContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("TimepunchConnection")));
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IClockService, ClockService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

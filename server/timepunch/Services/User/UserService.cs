@@ -1,6 +1,6 @@
 using timepunch.Models;
 
-namespace timepunch.Services.User
+namespace timepunch.Services
 {
     public class UserService : IUserService
     {

@@ -7,7 +7,7 @@ using timepunch.Exceptions;
 using JWT.Builder;
 using JWT.Algorithms;
 
-namespace timepunch.Services.Authentication
+namespace timepunch.Services
 {
     public class AuthService : IAuthService
     {
